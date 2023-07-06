@@ -11,39 +11,39 @@ const Form = () => {
     const [registrationNumber, setRegistrationNumber] = useState('');
     const [email, setEmail] = useState('');
 
-    const handleAnonymousFeedbackChange = (e) => {
+    const handleAnonymousFeedbackChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setAnonymousFeedback(e.target.value);
     };
 
-    const handleGraduationYearChange = (e) => {
+    const handleGraduationYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setGraduationYear(e.target.value);
     };
 
-    const handleIssueSelectionChange = (e) => {
+    const handleIssueSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setIssueSelection(e.target.value);
     };
 
-    const handleSubjectChange = (e) => {
+    const handleSubjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSubject(e.target.value);
     };
 
-    const handleDescriptionChange = (e) => {
+    const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setDescription(e.target.value);
     };
 
-    const handleNameChange = (e) => {
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
     };
 
-    const handleRegistrationNumberChange = (e) => {
+    const handleRegistrationNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setRegistrationNumber(e.target.value);
     };
 
-    const handleEmailChange = (e) => {
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         console.log({
             anonymousFeedback,
@@ -137,16 +137,16 @@ const Form = () => {
                     <p className='text-xl'>Describe your issue</p>
                     <textarea
                         className='text-lg w-full border-2 border-black bg-white rounded pl-2'
-                        rows='4'
+                        rows={4}
                         value={description}
                         onChange={handleDescriptionChange}
                     ></textarea>
                 </div>
             </div>
             <div>
-                <button className="bg-[#111827] text-white px-8 py-2 rounded" onClick={handleSubmit}>
-                    Submit
-                </button>
+            <button className="bg-[#111827] text-white px-8 py-2 rounded" onClick={handleSubmit as React.MouseEventHandler<HTMLButtonElement>}>
+                Submit
+            </button>
             </div>
         </div>
     );

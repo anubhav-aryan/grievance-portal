@@ -5,7 +5,7 @@ import { FaFacebook, FaLinkedin, FaInstagram, FaTwitter, FaYoutube } from 'react
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="flex-grow flex overflow-y-auto">
+      <main className="flex-grow flex">
         <div className='bg-[#408ec5] w-1/2 backdrop-blur-md relative'>
           <Image src="/chapters.png" alt="Chapters" fill={true} />
           <div className="absolute inset-0 flex justify-end pr-[2vw] pt-[1vh]">
