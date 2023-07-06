@@ -57,11 +57,11 @@ const Form = () => {
     return (
         <div className={`flex flex-col items-center align-center ${anonymousFeedback === 'no' ? 'mt-[5%] mb-[2%]' : 'mt-[10%]'} justify-center mx-[10%]`}>
             <div>
-                <p className='text-5xl mb-16'>Send Us Your Feedback!</p>
+                <p className={`text-4xl ${anonymousFeedback === 'no' ? 'mb-4' : 'mb-16'}`}>Send Us Your Feedback!</p>
             </div>
             <div className=''>
                 <div className='mb-4'>
-                    <p className='text-xl mb-2'>Do you want your feedback to be anonymous?</p>
+                    <p className='text-lg mb-2'>Do you want your feedback to be anonymous?</p>
                     <select
                         className='text-lg w-full border-2 border-black bg-white rounded pl-2'
                         value={anonymousFeedback}
@@ -74,7 +74,7 @@ const Form = () => {
                 {anonymousFeedback === 'no' && (
                     <>
                         <div className='mb-4'>
-                            <p className='text-xl'>Name:</p>
+                            <p className='text-lg'>Name:</p>
                             <input
                                 type='text'
                                 className='text-lg w-full border-2 border-black bg-white rounded pl-2'
@@ -83,7 +83,7 @@ const Form = () => {
                             />
                         </div>
                         <div className='mb-4'>
-                            <p className='text-xl'>Registration Number:</p>
+                            <p className='text-lg'>Registration Number:</p>
                             <input
                                 type='text'
                                 className='text-lg w-full border-2 border-black bg-white rounded pl-2'
@@ -92,7 +92,7 @@ const Form = () => {
                             />
                         </div>
                         <div className='mb-4'>
-                            <p className='text-xl'>Email ID:</p>
+                            <p className='text-lg'>Email ID:</p>
                             <input
                                 type='email'
                                 className='text-lg w-full border-2 border-black bg-white rounded pl-2'
@@ -103,7 +103,7 @@ const Form = () => {
                     </>
                 )}
                 <div className='mb-4'>
-                    <p className='text-xl'>Year Of Graduation:</p>
+                    <p className='text-lg'>Year Of Graduation:</p>
                     <select
                         className='text-lg w-full border-2 border-black bg-white rounded pl-2'
                         value={graduationYear}
@@ -114,8 +114,8 @@ const Form = () => {
                         <option value='2026'>2026</option>
                     </select>
                 </div>
-                <div className='mb-4'>
-                    <p className='text-xl'>Issue Selection</p>
+                {/* <div className='mb-4'>
+                    <p className='text-lg'>Issue Selection</p>
                     <select
                         className='text-lg w-full border-2 border-black bg-white rounded pl-2'
                         value={issueSelection}
@@ -123,9 +123,9 @@ const Form = () => {
                     >
                         <option value='yes'>YES</option>
                     </select>
-                </div>
+                </div> */}
                 <div className='mb-4'>
-                    <p className='text-xl'>Subject</p>
+                    <p className='text-lg'>Subject</p>
                     <input
                         type='text'
                         className='text-lg w-full border-2 border-black bg-white rounded pl-2'
@@ -134,10 +134,10 @@ const Form = () => {
                     />
                 </div>
                 <div className='mb-4'>
-                    <p className='text-xl'>Describe your issue</p>
+                    <p className='text-lg'>Describe your issue</p>
                     <textarea
                         className='text-lg w-full border-2 border-black bg-white rounded pl-2'
-                        rows={4}
+                        rows={3}
                         value={description}
                         onChange={handleDescriptionChange}
                     ></textarea>
