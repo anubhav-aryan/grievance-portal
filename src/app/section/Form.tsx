@@ -124,7 +124,7 @@ const Form = () => {
                         <option value='yes'>YES</option>
                     </select>
                 </div> */}
-                <div className='mb-4'>
+                {/* <div className='mb-4'>
                     <p className='text-lg'>Subject</p>
                     <input
                         type='text'
@@ -132,6 +132,32 @@ const Form = () => {
                         value={subject}
                         onChange={handleSubjectChange}
                     />
+                </div> */}
+                <div className='mb-4'>
+                    <p className='text-lg'>Problem Subject</p>
+                    <select
+                        className='text-lg w-full border-2 border-black bg-white rounded pl-2'
+                        value={graduationYear}
+                        onChange={handleGraduationYearChange}
+                    >
+                        <option value='Select'>Select </option>
+                        <option value='General Grievance'>General Grievance </option>
+                        <option value='Proctor Grievance'>Proctor Grievance </option>
+                        <option value='Academic Counselling'>Academic Counselling </option>
+                        <option value='NRI/Foreign Students Issues'>NRI/Foreign Students' Issues</option>
+                        <option value='Clubs and Chapters'>Clubs and Chapters</option>
+                        <option value='ECA Course'>ECA Course</option>
+                        <option value='Student Achievements'>Student Achievements</option>
+                        <option value='Day Scholars'>Day Scholars </option>
+                        <option value='Day Boarders'>Day Boarders</option>
+                        <option value='Other'>Other</option>
+                        <option value='Disciplinary Issues'>Disciplinary Issues</option>
+                        <option value='Hostel'>Hostel </option>
+                        <option value='Canteen / Eating Places'>Canteen / Eating Places</option>
+                        <option value='Health Center'>Health Center</option>
+                        <option value='Campus Shops'>Campus Shops</option>
+                        <option value='Other'>Other</option>
+                    </select>
                 </div>
                 <div className='mb-4'>
                     <p className='text-lg'>Describe your issue</p>
