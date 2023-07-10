@@ -1,0 +1,60 @@
+package handlers
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"time"
+	"sw-feedback/config"
+
+	_ "github.com/joho/godotenv/autoload"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+)
+
+var postcollection *mongo.Collection
+var usercollection *mongo.Collection
+var client *mongo.Client
+
+func ConnectToDB() {
+	connectionurl := config.MONGO_URL
+	clientOptions := options.Client().ApplyURI(connectionurl)
+
+	// Create a MongoDB client
+	client, ERR := mongo.NewClient(clientOptions)
+	if ERR != nil {
+		log.Fatal(ERR)
+	}
+
+	// Set a timeout for the connection
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// Connect to MongoDB Atlas
+	ERR = client.Connect(ctx)
+	if ERR != nil {
+		log.Fatal(ERR)
+	}
+
+	// Ping the MongoDB server to check the connection
+	ERR = client.Ping(ctx, nil)
+	if ERR != nil {
+		log.Fatal(ERR)
+	}
+
+	fmt.Println("Connected to MongoDB Atlas!")
+
+	postcollection = client.Database("Feedback").Collection("post")
+	usercollection = client.Database("Feedback").Collection("user")
+
+}
+
+func DisconnectFromDB() {
+	// Disconnect from MongoDB Atlas
+	err := client.Disconnect(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Disconnected from MongoDB Atlas!")
+}
