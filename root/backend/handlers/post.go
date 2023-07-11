@@ -99,17 +99,8 @@ func GetPosts(c *fiber.Ctx) error {
 			})
 		}
 		return c.Status(fiber.StatusOK).JSON(posts)
-	} else if role == "teacher" {
-		filter := bson.M{"issuetype": "studies"}
-		posts, err := getPostsByFilter(filter)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": "Failed to retrieve posts",
-			})
-		}
-		return c.Status(fiber.StatusOK).JSON(posts)
-	} else if role == "doctor" {
-		filter := bson.M{"issuetype": "health"}
+	} else if role != "admin" {
+		filter := bson.M{"issuetype": role}
 		posts, err := getPostsByFilter(filter)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
