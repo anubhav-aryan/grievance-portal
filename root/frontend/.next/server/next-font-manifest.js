@@ -1,1 +1,0 @@
-self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/Users/prabhav/Documents/Project/feedback/root/frontend/src/app/layout":["static/media/d869208648ca5469-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';
