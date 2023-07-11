@@ -5,21 +5,26 @@ import Toaster from "@/utils/toaster";
 
 const Form = () => {
     const [anonymousFeedback, setAnonymousFeedback] = useState('');
-    const [graduationYear, setGraduationYear] = useState('');
+    const [graduationYear, setGraduationYear] = useState<number>(2024);
     const [issueSelection, setIssueSelection] = useState('');
     const [subject, setSubject] = useState('');
     const [description, setDescription] = useState('');
     const [name, setName] = useState('');
     const [registrationNumber, setRegistrationNumber] = useState('');
     const [email, setEmail] = useState('');
+    const [problemSubject, setProblemSubject] = useState('');
 
     const handleAnonymousFeedbackChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setAnonymousFeedback(e.target.value);
     };
 
-    const handleGraduationYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setGraduationYear(e.target.value);
+    const handleProblemSubject = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setProblemSubject(e.target.value);
     };
+
+    const handleGraduationYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setGraduationYear(parseInt(e.target.value));
+    };    
 
     const handleIssueSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setIssueSelection(e.target.value);
@@ -49,9 +54,9 @@ const Form = () => {
         e.preventDefault();
     
         const formData = {
-          anymtype: anonymousFeedback === 'no' ? 0 : 1,
+          anymtype: anonymousFeedback === 'no' ? 1 : 0,
           gradyr: graduationYear,
-          issuetype: subject,
+          issuetype: problemSubject,
           description: description,
           name: name,
           regno: registrationNumber,
@@ -59,7 +64,6 @@ const Form = () => {
         };
     
         const response = await postHandler('http://127.0.0.1:8080/posts/create', formData);
-    
         console.log(response);
       };
     return (
@@ -145,8 +149,8 @@ const Form = () => {
                     <p className='text-lg'>Problem Subject</p>
                     <select
                         className='text-lg w-full border-2 border-black bg-white rounded pl-2'
-                        value={graduationYear}
-                        onChange={handleGraduationYearChange}
+                        value={problemSubject}
+                        onChange={handleProblemSubject}
                     >
                         <option value='Select'>Select </option>
                         <option value='General Grievance'>General Grievance </option>
