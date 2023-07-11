@@ -10,7 +10,6 @@ require (
 	golang.org/x/crypto v0.7.0
 )
 
-
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
