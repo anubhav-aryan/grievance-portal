@@ -1,5 +1,7 @@
 'use client'
 import React, { useState } from 'react';
+import postHandler from '../handlers/postHandler';
+import Toaster from "@/utils/toaster";
 
 const Form = () => {
     const [anonymousFeedback, setAnonymousFeedback] = useState('');
@@ -43,17 +45,23 @@ const Form = () => {
         setEmail(e.target.value);
     };
 
-    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log({
-            anonymousFeedback,
-            graduationYear,
-            issueSelection,
-            subject,
-            description,
-        });
-    };
-
+    
+        const formData = {
+          anymtype: anonymousFeedback === 'no' ? 0 : 1,
+          gradyr: graduationYear,
+          issuetype: subject,
+          description: description,
+          name: name,
+          regno: registrationNumber,
+          email: email,
+        };
+    
+        const response = await postHandler('http://127.0.0.1:8080/posts/create', formData);
+    
+        console.log(response);
+      };
     return (
         <div className={`flex flex-col items-center align-center ${anonymousFeedback === 'no' ? 'md:mt-[3%] mt-[5%] mb-[3%] md:mb-[1%]' : 'mt-[10%] mb-[3%]'} justify-center mx-[10%]`}>
             <div>
