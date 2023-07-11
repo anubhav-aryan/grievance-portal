@@ -21,7 +21,7 @@ func CreatePost(c *fiber.Ctx) error {
 		})
 	}
 
-	if grad := post.Gradyr; grad < 2024 {
+	if grad := post.Gradyr; grad < 2023 {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid graduation year",
 		})
