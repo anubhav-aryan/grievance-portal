@@ -13,6 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
 )
+
 func generateID() int64 {
 	return atomic.AddInt64(&config.COUNTER_USER, 1)
 }
@@ -56,7 +57,7 @@ func SignupHandler(c *fiber.Ctx) error {
 		"email":      user.Email,
 		"password":   string(hashedPassword),
 		"role":       config.DEFAULT_ROLE,
-		"id":  	      newID,
+		"id":         newID,
 	}
 
 	_, err = usercollection.InsertOne(context.Background(), newUser)

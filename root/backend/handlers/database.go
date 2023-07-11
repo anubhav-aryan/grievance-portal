@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 	"sw-feedback/config"
+	"time"
 
 	_ "github.com/joho/godotenv/autoload"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -20,18 +20,19 @@ func ConnectToDB() {
 	connectionurl := config.MONGO_URL
 	clientOptions := options.Client().ApplyURI(connectionurl)
 
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 	// Create a MongoDB client
-	client, ERR := mongo.NewClient(clientOptions)
+	client, ERR := mongo.Connect(ctx, clientOptions)
 	if ERR != nil {
 		log.Fatal(ERR)
 	}
 
 	// Set a timeout for the connection
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// defer cancel()
 
 	// Connect to MongoDB Atlas
-	ERR = client.Connect(ctx)
 	if ERR != nil {
 		log.Fatal(ERR)
 	}
