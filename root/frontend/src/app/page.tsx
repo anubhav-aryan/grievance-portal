@@ -6,17 +6,17 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-grow flex flex-wrap overflow-hidden">
-        <div className="w-full md:w-1/2 max-md:h-[60vh] max-sm:h-[80vh] bg-[#408ec5] relative">
+        <div className="w-full md:w-1/2 max-md:h-[60vh] max-sm:h-[90vh] bg-[#408ec5] relative">
           <div className="h-full">
             <Image src="/chapters.png" alt="Chapters" fill={true} />
             <div className="absolute inset-0 flex justify-end pr-[2vw] pt-[1vh]">
-              <div className="w-1/3 md:h-[10%] h-[20%] relative">
+              <div className="md:min-w-[200px] min-w-[150px] md:h-[10%] h-[20%] relative">
                 <Image src="/logo.svg" alt="VIT Logo" fill={true} />
               </div>
             </div>
             <div className="absolute text-white left-[10%] top-[20%] flex-col max-h-[70%] overflow-y-auto">
               <p className="text-3xl mb-16">About Us:</p>
-              <p className="pr-[20%] text-sm">
+              <p className="pr-[20%] md:text-sm text-[12px]">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
                 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
                 ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo,

@@ -55,7 +55,7 @@ const Form = () => {
     };
 
     return (
-        <div className={`flex flex-col items-center align-center ${anonymousFeedback === 'no' ? 'mt-[5%] mb-[2%]' : 'mt-[10%] mb-[2%]'} justify-center mx-[10%]`}>
+        <div className={`flex flex-col items-center align-center ${anonymousFeedback === 'no' ? 'md:mt-[3%] mt-[5%] mb-[3%] md:mb-[1%]' : 'mt-[10%] mb-[3%]'} justify-center mx-[10%]`}>
             <div>
                 <p className={`text-4xl ${anonymousFeedback === 'no' ? 'mb-4' : 'mb-16'}`}>Send Us Your Feedback!</p>
             </div>
