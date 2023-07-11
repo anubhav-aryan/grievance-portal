@@ -7,6 +7,5 @@ type Post struct {
 	Email       string `json:"email,omitempty"`
 	Gradyr      int    `json:"gradyr"`
 	IssueType   string `json:"issuetype"`
-	Subject     string `json:"subject"`
 	Description string `json:"description"`
 }

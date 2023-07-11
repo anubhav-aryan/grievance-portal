@@ -51,7 +51,6 @@ func CreatePost(c *fiber.Ctx) error {
 			"email":       post.Email,
 			"gradyr":      post.Gradyr,
 			"issuetype":   post.IssueType,
-			"subject":     post.Subject,
 			"description": post.Description,
 		}
 		_, err = postcollection.InsertOne(c.Context(), newPost)
@@ -65,7 +64,6 @@ func CreatePost(c *fiber.Ctx) error {
 			"anymtype":    post.Anymtype,
 			"gradyr":      post.Gradyr,
 			"issuetype":   post.IssueType,
-			"subject":     post.Subject,
 			"description": post.Description,
 		}
 
