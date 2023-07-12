@@ -2,10 +2,12 @@
 import { useState } from 'react';
 import postHandler from '@/app/handlers/postHandler';
 import { Toaster, ToastContainer } from '@/app/utils/Toaster';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -13,16 +15,16 @@ export default function Login() {
       email,
       password,
     };
-    console.log(formData);
 
     const response = await postHandler('http://127.0.0.1:8080/login', formData);
 
     if (response.status === 1) {
-      Toaster.success('Login successful');
       console.log('Login successful:', response.data);
+      router.push('/admin');
+      Toaster.success('Login successful');
     } else {
-      Toaster.error(`${response.data.error}`);
       console.error('Login error:', response.data);
+      Toaster.error('Login error');
     }
   };
 
