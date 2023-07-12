@@ -20,8 +20,8 @@ export default function Login() {
 
     if (response.status === 1) {
       console.log('Login successful:', response.data);
-      router.push('/admin');
       Toaster.success('Login successful');
+      localStorage.setItem('token', response.data.token);
     } else {
       console.error('Login error:', response.data);
       Toaster.error('Login error');
