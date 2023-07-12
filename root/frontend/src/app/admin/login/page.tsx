@@ -1,7 +1,8 @@
 'use client'
 import { useState } from 'react';
-import getHandler from '@/app/handlers/getHandler';
+// import postHandler from '@/app/handlers/postHandler';
 import { Toaster, ToastContainer } from '@/app/utils/Toaster';
+import postHandler from '@/app/handlers/postHandler';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ export default function Login() {
     };
     console.log(formData);
 
-    const response = await getHandler('http://127.0.0.1:8080/login', formData);
+    const response = await postHandler('http://127.0.0.1:8080/login', formData);
 
     if (response.status === 1) {
       Toaster.success('Login successful');

@@ -62,7 +62,7 @@ const Form = () => {
           regno: registrationNumber,
           email: email,
         };
-    
+        console.log(formData);
         const response = await postHandler('http://127.0.0.1:8080/posts/create', formData);
         console.log(response);
       };

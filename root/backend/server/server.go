@@ -34,11 +34,11 @@ func StartServer() {
 		})
 	})
 	// Get Requests
-	app.Get("/login", handlers.LoginHandler)
-	app.Get("/admin/panel", adminjwt, handlers.GetUsers)	
+	app.Get("/admin/panel", adminjwt, handlers.GetUsers)
 	app.Get("/posts/get", postjwt, handlers.GetPosts)
-
+	
 	// Post Requests
+	app.Post("/login", handlers.LoginHandler)
 	app.Post("/posts/create", handlers.CreatePost)
 	app.Post("/signup", handlers.SignupHandler)
 
