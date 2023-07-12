@@ -1,8 +1,12 @@
 import { toast, ToastOptions, UpdateOptions, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+interface CustomToastOptions extends ToastOptions {
+  toastClassName?: string;
+}
+
 class Toaster {
-  static toastSettings: ToastOptions = {
+  static toastSettings: CustomToastOptions = {
     position: 'top-center',
     autoClose: 5000,
     hideProgressBar: false,

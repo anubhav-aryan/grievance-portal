@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react';
 import postHandler from '../handlers/postHandler';
-import Toaster from "@/utils/toaster";
 
 const Form = () => {
     const [anonymousFeedback, setAnonymousFeedback] = useState('');
@@ -62,7 +61,7 @@ const Form = () => {
           regno: registrationNumber,
           email: email,
         };
-    
+        
         const response = await postHandler('http://127.0.0.1:8080/posts/create', formData);
         console.log(response);
       };
