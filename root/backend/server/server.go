@@ -25,10 +25,18 @@ func StartServer() {
 
 	// Fiber instance
 	app := fiber.New()
-	app.Use(cors.New())		
+	corsConfig := cors.Config{
+		AllowOrigins:     "http://localhost:3000",
+		AllowMethods:     "POST, GET, OPTIONS, PUT, DELETE",
+		AllowHeaders:     "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Ngrok-Skip-Browser-Warning",
+		AllowCredentials: true,
+		ExposeHeaders:    "Set-Cookie", // Include "Set-Cookie" in Access-Control-Expose-Headers
+	}
+
+	app.Use(cors.New(corsConfig))
 	// Routes
 	app.Use(logger.New())
-	app.Get("/", func(c *fiber.Ctx) error {	
+	app.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"message": "Hello, World!",
 		})
