@@ -3,7 +3,6 @@ package middlewares
 import (
 	"strings"
 	"sw-feedback/config"
-	"sw-feedback/handlers"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
@@ -50,16 +49,6 @@ func JwtMiddleware(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Unauthorized"})
 	}
 
-	// Set the JWT token as an HTTP-only cookie with the expiration time
-	cookie := fiber.Cookie{
-		Name:     "jwt",
-		Value:    tokenString,
-		HTTPOnly: true,
-		Expires:  handlers.EXPIRATION,
-		Path:     "/",
-	}
-	c.Cookie(&cookie)
-
 	return c.Next()
 }
 
@@ -103,18 +92,6 @@ func PostMiddleware(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Unauthorized"})
 	}
 	role = strings.TrimSpace(role)
-
-	// Set the expiration time for the cookie
-
-	// Set the JWT token as an HTTP-only cookie with the expiration time
-	cookie := fiber.Cookie{
-		Name:     "jwt",
-		Value:    tokenString,
-		HTTPOnly: true,
-		Expires:  handlers.EXPIRATION,
-		Path:     "/",
-	}
-	c.Cookie(&cookie)
 
 	c.Context().SetUserValue("role", role)
 

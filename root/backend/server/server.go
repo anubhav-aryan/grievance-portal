@@ -25,10 +25,10 @@ func StartServer() {
 
 	// Fiber instance
 	app := fiber.New()
-	app.Use(cors.New())
+	app.Use(cors.New())		
 	// Routes
 	app.Use(logger.New())
-	app.Get("/", func(c *fiber.Ctx) error {
+	app.Get("/", func(c *fiber.Ctx) error {	
 		return c.JSON(fiber.Map{
 			"message": "Hello, World!",
 		})
@@ -36,7 +36,7 @@ func StartServer() {
 	// Get Requests
 	app.Get("/admin/panel", adminjwt, handlers.GetUsers)
 	app.Get("/posts/get", postjwt, handlers.GetPosts)
-	
+
 	// Post Requests
 	app.Post("/login", handlers.LoginHandler)
 	app.Post("/posts/create", handlers.CreatePost)

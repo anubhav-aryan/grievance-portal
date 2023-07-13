@@ -96,10 +96,21 @@ func LoginHandler(c *fiber.Ctx) error {
 		// Handle error
 		log.Fatal(err)
 	}
+	cookie := new(fiber.Cookie)
+	cookie.Name = "accessToken"
+	cookie.Value = token
+	cookie.Expires = EXPIRATION
+	cookie.Secure = false
+	cookie.HTTPOnly = true
+	cookie.Path = "/"
+
+	c.Cookie(cookie)
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Login successful!",
 		"token":   token,
 	})
+
 }
 
 func getPasswordAndIDFromDatabase(email string) (string, string) {
