@@ -1,7 +1,6 @@
 package server
 
 import (
-	"log"
 	"os"
 	"os/signal"
 	"sw-feedback/config"
@@ -15,13 +14,9 @@ import (
 )
 
 func StartServer() {
-
-	// Db connection Request
 	handlers.ConnectToDB()
 	defer handlers.DisconnectFromDB()
-
-	adminjwt := middlewares.JwtMiddleware
-	postjwt := middlewares.PostMiddleware
+	adminjwt, postjwt := middlewares.JwtMiddleware, middlewares.PostMiddleware
 
 	// Fiber instance
 	app := fiber.New()
@@ -51,12 +46,12 @@ func StartServer() {
 	app.Post("/signup", handlers.SignupHandler)
 
 	// Patch Requests
-	app.Patch("/admin/panel/update/:id", adminjwt, handlers.UpdateUser)
+	app.Patch("/admin/panel/update/:_id", adminjwt, handlers.UpdateUser)
 
 	// Server Port
 	err := app.Listen(":" + config.PORT)
 	if err != nil {
-		log.Fatal(err)
+		os.Exit(1)
 	}
 
 	// Check for termination signal

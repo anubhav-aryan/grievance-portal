@@ -34,8 +34,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-
-# root/docker-compose.yml
 root/backend/.env
-# root/backend/Dockerfile
-# root/frontend/Dockerfile

@@ -4,9 +4,7 @@ import (
 	"context"
 	"regexp"
 
-	"sw-feedback/config"
 	"sw-feedback/models"
-	"sync/atomic"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -27,7 +25,6 @@ func CreatePost(c *fiber.Ctx) error {
 		})
 	}
 
-	// Email Check and Registration Number Check
 	if post.Anymtype != 0 {
 		emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@vitstudent\.ac\.in$`)
 		if !emailRegex.MatchString(post.Email) {
@@ -40,10 +37,6 @@ func CreatePost(c *fiber.Ctx) error {
 				"error": "Invalid registration number",
 			})
 		}
-	}
-
-	ticketNumber := generateTicketNumber()
-	if post.Anymtype != 0 {
 		newPost := bson.M{
 			"anymtype":    post.Anymtype,
 			"name":        post.Name,
@@ -76,8 +69,7 @@ func CreatePost(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message":      "Post created successfully",
-		"ticketNumber": ticketNumber,
+		"message": "Post created successfully",
 	})
 
 }
@@ -90,64 +82,49 @@ func GetPosts(c *fiber.Ctx) error {
 		})
 	}
 	if role == "admin" {
-		posts, err := getAllPosts()
+		cursor, err := postcollection.Find(context.Background(), bson.M{})
 		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": "Failed to retrieve posts",
-			})
+			return nil
+		}
+		defer cursor.Close(context.Background())
+
+		var posts []models.Post
+		for cursor.Next(context.Background()) {
+			var post models.Post
+			if err := cursor.Decode(&post); err != nil {
+				return nil
+			}
+			posts = append(posts, post)
+		}
+
+		if err := cursor.Err(); err != nil {
+			return nil
 		}
 		return c.Status(fiber.StatusOK).JSON(posts)
 	} else if role != "admin" {
-		filter := bson.M{"issuetype": role}
-		posts, err := getPostsByFilter(filter)
+		cursor, err := postcollection.Find(context.Background(), bson.M{"issuetype": role})
 		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": "Failed to retrieve posts",
-			})
+			return nil
 		}
+		defer cursor.Close(context.Background())
+
+		var posts []models.Post
+		for cursor.Next(context.Background()) {
+			var post models.Post
+			if err := cursor.Decode(&post); err != nil {
+				return nil
+			}
+			posts = append(posts, post)
+		}
+
+		if err := cursor.Err(); err != nil {
+			return nil
+		}
+
 		return c.Status(fiber.StatusOK).JSON(posts)
 	}
 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 		"error": "Failed to retrieve posts",
 	})
 
-}
-
-func getPostsByFilter(filter bson.M) ([]models.Post, error) {
-
-	cursor, err := postcollection.Find(context.Background(), filter)
-	if err != nil {
-		return nil, err
-	}
-	defer cursor.Close(context.Background())
-
-	var posts []models.Post
-	if err := cursor.All(context.Background(), &posts); err != nil {
-		return nil, err
-	}
-
-	return posts, nil
-}
-func getAllPosts() ([]models.Post, error) {
-
-	var posts []models.Post
-
-	cursor, err := postcollection.Find(context.Background(), bson.M{})
-	if err != nil {
-		return nil, err
-	}
-	defer cursor.Close(context.Background())
-	for cursor.Next(context.Background()) {
-		var order models.Post
-		if err := cursor.Decode(&order); err != nil {
-			return nil, err
-		}
-		posts = append(posts, order)
-	}
-
-	return posts, nil
-}
-
-func generateTicketNumber() int64 {
-	return atomic.AddInt64(&config.COUNTER_POST, 1)
 }

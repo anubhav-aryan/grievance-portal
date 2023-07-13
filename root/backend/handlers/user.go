@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"context"
-	"strconv"
 	"sw-feedback/models"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func GetUsers(c *fiber.Ctx) error {
@@ -27,13 +27,16 @@ func GetUsers(c *fiber.Ctx) error {
 }
 
 func UpdateUser(c *fiber.Ctx) error {
-	idStr := c.Params("id")
-	id, err := strconv.ParseInt(idStr, 10, 64)
+	idStr := c.Params("_id")
+
+	// Create an ObjectID from the provided ID string
+	id, err := primitive.ObjectIDFromHex(idStr)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid ID",
 		})
 	}
+
 	var user models.SignupUser
 	err = c.BodyParser(&user)
 	if err != nil {
@@ -41,12 +44,26 @@ func UpdateUser(c *fiber.Ctx) error {
 			"error": "Invalid request body",
 		})
 	}
-	_, err = usercollection.UpdateOne(context.Background(), bson.M{"id": id}, bson.M{"$set": bson.M{"role": user.Role}})
+
+	update := bson.M{
+		"$set": bson.M{
+			"role": user.Role,
+		},
+	}
+
+	result, err := usercollection.UpdateOne(context.Background(), bson.M{"_id": id}, update)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to update user",
 		})
 	}
+
+	if result.ModifiedCount == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "User not found",
+		})
+	}
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "User updated successfully",
 	})
