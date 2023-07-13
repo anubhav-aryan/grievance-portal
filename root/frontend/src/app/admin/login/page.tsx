@@ -1,5 +1,5 @@
-'use client'
-import { useState } from 'react';
+'use client';
+import { useState, useEffect } from 'react';
 import postHandler from '@/app/handlers/postHandler';
 import { Toaster, ToastContainer } from '@/app/utils/Toaster';
 import { useRouter } from 'next/navigation';
@@ -8,6 +8,24 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+
+  const getCookie = (name) => {
+    const cookies = document.cookie.split('; ');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].split('=');
+      if (cookie[0] === name) {
+        return cookie[1];
+      }
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    const token = getCookie('token');
+    if (token) {
+      router.push('/admin/issues');
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,12 +39,24 @@ export default function Login() {
     if (response.status === 1) {
       console.log('Login successful:', response.data);
       Toaster.success('Login successful');
-      localStorage.setItem('token', response.data.token);
+      const token = response.data.token;
+      setCookie('token', token);
+      router.push('/admin/issues');
     } else {
       console.error('Login error:', response.data);
       Toaster.error('Login error');
     }
   };
+
+  const handleSignup = () => {
+    router.push('/admin/signup');
+  };
+
+  const setCookie = (name, value) => {
+    document.cookie = `${name}=${value}; path=/; Secure;`;
+  };
+
+  
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -54,6 +84,15 @@ export default function Login() {
             Login
           </button>
         </form>
+        <div className="mt-4 text-center gap-x-8">
+          <p>Don't have an account?</p>
+          <button
+            className="text-blue-500 hover:underline"
+            onClick={handleSignup}
+          >
+            Sign up
+          </button>
+        </div>
         <ToastContainer />
       </div>
     </div>

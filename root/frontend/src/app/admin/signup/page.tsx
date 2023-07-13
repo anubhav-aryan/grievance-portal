@@ -1,15 +1,14 @@
-'use client'
+'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import postHandler from '@/app/handlers/postHandler';
 import { Toaster, ToastContainer } from '@/app/utils/Toaster';
-import { useRouter } from 'next/navigation';
 
 export default function Signup() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,6 +30,10 @@ export default function Signup() {
       Toaster.error(`${response.data.error}`);
       console.error('Signup error:', response.data);
     }
+  };
+
+  const handleLoginRedirect = () => {
+    router.push('/admin/login');
   };
 
   return (
@@ -73,6 +76,15 @@ export default function Signup() {
             Signup
           </button>
         </form>
+        <div className="text-center mt-4">
+          <p>Already have an account?</p>
+          <button
+            className="text-blue-500 hover:underline"
+            onClick={handleLoginRedirect}
+          >
+            Login here
+          </button>
+        </div>
         <ToastContainer />
       </div>
     </div>

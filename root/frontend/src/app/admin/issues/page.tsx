@@ -1,14 +1,34 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import getHandler from '@/app/handlers/getHandler';
+import { Toaster, ToastContainer } from '@/app/utils/Toaster';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(20);
+  const router = useRouter();
+
+  const getCookie = (name) => {
+    const cookies = document.cookie.split('; ');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].split('=');
+      if (cookie[0] === name) {
+        return cookie[1];
+      }
+    }
+    return null;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = getCookie('token');
+      if (!token) {
+        router.push('/admin/login');
+        return;
+      }
+
       const response = await getHandler('http://127.0.0.1:8080/posts/get');
       if (response.status === 1) {
         setPosts(response.data);
@@ -17,18 +37,14 @@ const Page = () => {
     fetchData();
   }, []);
 
-  // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Calculate total number of pages
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
-  // Generate array of page numbers
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
@@ -78,6 +94,7 @@ const Page = () => {
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

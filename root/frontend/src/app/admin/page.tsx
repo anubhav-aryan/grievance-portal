@@ -1,18 +1,35 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import getHandler from '../handlers/getHandler';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
   const [users, setUsers] = useState([]);
+  const router = useRouter();
+
+  const getCookie = (name) => {
+    const cookies = document.cookie.split('; ');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].split('=');
+      if (cookie[0] === name) {
+        return cookie[1];
+      }
+    }
+    return null;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        const response = await getHandler('http://127.0.0.1:8080/admin/panel');
-        if (response.status === 1) {
-          setUsers(response.data);
-        }
+      const token = getCookie('token');
+      if (!token) {
+        router.push('/admin/login');
+        return;
+      }
+
+      const response = await getHandler('http://127.0.0.1:8080/admin/panel');
+      console.log(response);
+      if (response.status === 1) {
+        setUsers(response.data);
       }
     };
     fetchData();
