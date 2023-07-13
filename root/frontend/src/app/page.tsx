@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import React from 'react';
 import Form from './section/Form';
 import { FaFacebook, FaLinkedin, FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 
