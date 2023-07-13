@@ -6,12 +6,12 @@ import patchHandler from '@/app/handlers/patchHandler';
 import { ToastContainer, Toaster } from '@/app/utils/Toaster';
 
 const Page = () => {
-  const [users, setUsers] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [users, setUsers] = useState<Array<any>>([]);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [inputRole, setInputRole] = useState('');
   const router = useRouter();
 
-  const getCookie = (name) => {
+  const getCookie = (name: string) => {
     const cookies = document.cookie.split('; ');
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].split('=');
@@ -37,25 +37,25 @@ const Page = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [router]);
 
-  const updateUserRole = async (userId) => {
+  const updateUserRole = async (userId: string) => {
     setSelectedUserId(userId);
   };
 
-  const handleRoleUpdate = async (userId) => {
-    const token = getCookie('token');
+  const handleRoleUpdate = async (userId: string) => {
+    const token = getCookie('token') || '';
     const URL = `http://127.0.0.1:8080/admin/panel/update/${userId}`;
     const formData = {
       role: inputRole,
     };
-
+  
     const response = await patchHandler(URL, formData, 'application/json', token);
     if (response.status === 1) {
       Toaster.success('User role updated successfully');
       console.log('User role updated:', response.data);
       // Update the user list to reflect the changed role
-      const updatedUsers = users.map((user) => {
+      const updatedUsers = users.map((user: any) => {
         if (user.id === userId) {
           return { ...user, role: inputRole };
         }
@@ -74,7 +74,7 @@ const Page = () => {
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6 ml-4">User List</h1>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {users.map((user) => (
+        {users.map((user: any) => (
           <div
             key={user._id}
             className="bg-white rounded shadow p-4 flex flex-col justify-between"
@@ -122,5 +122,6 @@ const Page = () => {
 };
 
 export default Page;
+
 
 

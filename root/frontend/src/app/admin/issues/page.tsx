@@ -4,13 +4,20 @@ import getHandler from '@/app/handlers/getHandler';
 import { Toaster, ToastContainer } from '@/app/utils/Toaster';
 import { useRouter } from 'next/navigation';
 
+interface Post {
+  anymtype: number;
+  issuetype: string;
+  description: string;
+  gradyr: string;
+}
+
 const Page = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(20);
   const router = useRouter();
 
-  const getCookie = (name) => {
+  const getCookie = (name: string) => {
     const cookies = document.cookie.split('; ');
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].split('=');
@@ -41,7 +48,7 @@ const Page = () => {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
@@ -100,6 +107,8 @@ const Page = () => {
 };
 
 export default Page;
+
+
 
 
 

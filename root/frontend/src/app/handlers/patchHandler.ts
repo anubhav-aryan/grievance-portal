@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const patchHandler = async (URL, formData, type = 'application/json', token) => {
+const patchHandler = async (URL: string, formData: any, type = 'application/json', token: string) => {
   const headers = {
     'Content-Type': type,
     Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4ifQ.F1On1W7kllKokCMtmRvLQesN23KgurWLq_zBjP6UHX0`, 
