@@ -51,7 +51,7 @@ const Page = () => {
   const handleSignup = () => {
     router.push('/admin/signup');
   };
-
+  
   const setCookie = (name: string, value: string) => {
     document.cookie = `${name}=${value}; path=/; Secure;`;
   };
