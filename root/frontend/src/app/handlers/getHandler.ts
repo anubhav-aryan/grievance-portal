@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const getHandler = async (URL: string) => {
+const getHandler = async (URL: string, token: string) => {
   const headers = {
     'Content-Type': 'application/json',
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4ifQ.F1On1W7kllKokCMtmRvLQesN23KgurWLq_zBjP6UHX0`,
+    Authorization: `Bearer ${token}`,
     'ngrok-skip-browser-warning': true,
   };
   const response: any = {
