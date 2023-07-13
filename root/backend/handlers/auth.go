@@ -7,12 +7,15 @@ import (
 	"sw-feedback/config"
 	"sw-feedback/models"
 	"sync/atomic"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
 )
+
+var EXPIRATION time.Time
 
 func generateID() int64 {
 	return atomic.AddInt64(&config.COUNTER_USER, 1)
@@ -88,8 +91,11 @@ func LoginHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	token := generateToken(userRole)
-
+	token, err := generateToken(userRole)
+	if err != nil {
+		// Handle error
+		log.Fatal(err)
+	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Login successful!",
 		"token":   token,
@@ -110,17 +116,23 @@ func getPasswordAndIDFromDatabase(email string) (string, string) {
 	return hashedPassword, userRole
 }
 
-func generateToken(userRole string) string {
+func generateToken(userRole string) (string, error) {
+	// Set the expiration time
+	EXPIRATION := time.Now().Add(15 * time.Minute)
 
+	// Create a new token with the desired signing method
 	token := jwt.New(jwt.SigningMethodHS256)
 
+	// Set the claims for the token
 	claims := token.Claims.(jwt.MapClaims)
 	claims["role"] = userRole
+	claims["exp"] = EXPIRATION.Unix() // Set the expiration claim
 
+	// Sign the token with the secret key
 	tokenString, err := token.SignedString([]byte(config.SECRET_KEY))
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
-	return tokenString
+	return tokenString, nil
 }
