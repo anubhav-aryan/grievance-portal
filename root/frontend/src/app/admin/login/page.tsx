@@ -1,12 +1,12 @@
 'use client';
-import { useState, useEffect } from 'react';
-import postHandler from '@/app/handlers/postHandler';
-import { Toaster, ToastContainer } from '@/app/utils/Toaster';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import getHandler from '@/app/handlers/getHandler';
+import patchHandler from '@/app/handlers/patchHandler';
+import { ToastContainer, Toaster } from '@/app/utils/Toaster';
 
-export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Page = () => {
+  const [users, setUsers] = useState([]);
   const router = useRouter();
 
   const getCookie = (name) => {
@@ -21,80 +21,97 @@ export default function Login() {
   };
 
   useEffect(() => {
-    const token = getCookie('token');
-    if (token) {
-      router.push('/admin/issues');
-    }
+    const fetchData = async () => {
+      const token = getCookie('token');
+      if (!token) {
+        router.push('/admin/login');
+        return;
+      }
+
+      const response = await getHandler('http://127.0.0.1:8080/admin/panel');
+      console.log(response);
+      if (response.status === 1) {
+        setUsers(response.data);
+      }
+    };
+    fetchData();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const updateUserRole = async (userId, role) => {
+    const token = getCookie('token');
+    const URL = `http://127.0.0.1:8080/admin/panel/update/${userId}`;
     const formData = {
-      email,
-      password,
+      role,
     };
 
-    const response = await postHandler('http://127.0.0.1:8080/login', formData);
-
+    const response = await patchHandler(URL, formData, 'application/json', token);
     if (response.status === 1) {
-      console.log('Login successful:', response.data);
-      Toaster.success('Login successful');
-      const token = response.data.token;
-      setCookie('token', token);
-      router.push('/admin/issues');
+      Toaster.success('User role updated successfully');
+      console.log('User role updated:', response.data);
+      // Update the user list to reflect the changed role
+      const updatedUsers = users.map((user) => {
+        if (user.id === userId) {
+          return { ...user, role };
+        }
+        return user;
+      });
+      setUsers(updatedUsers);
     } else {
-      console.error('Login error:', response.data);
-      Toaster.error('Login error');
+      Toaster.error('Error updating user role');
+      console.error('Error updating user role:', response.data);
     }
   };
 
-  const handleSignup = () => {
-    router.push('/admin/signup');
-  };
-
-  const setCookie = (name, value) => {
-    document.cookie = `${name}=${value}; path=/; Secure;`;
-  };
-
-  
-
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="max-w-xl w-full mx-auto p-4 bg-white rounded shadow">
-        <h1 className="text-3xl text-center mb-6">Admin Login</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded"
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-6">User List</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {users.map((user) => (
+          <div
+            key={user._id}
+            className="bg-white rounded shadow p-4 flex flex-col justify-between"
           >
-            Login
-          </button>
-        </form>
-        <div className="mt-4 text-center gap-x-8">
-          <p>Don't have an account?</p>
-          <button
-            className="text-blue-500 hover:underline"
-            onClick={handleSignup}
-          >
-            Sign up
-          </button>
-        </div>
-        <ToastContainer />
+            <div>
+              <h2 className="text-xl font-bold mb-2">
+                {user.first_name} {user.last_name}
+              </h2>
+              <p className="text-gray-500 mb-4 truncate">{user.email}</p>
+              <p className="text-gray-500">{user.role}</p>
+            </div>
+            <div className="mt-4">
+              <p className="text-sm text-gray-400">{user.id}</p>
+              {user.id === selectedUserId ? (
+                <div className="flex">
+                  <input
+                    type="text"
+                    placeholder="Enter new role"
+                    value={inputRole}
+                    onChange={(e) => setInputRole(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded mr-2"
+                  />
+                  <button
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => updateUserRole(user.id, inputRole)}
+                  >
+                    Update
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2"
+                  onClick={() => setSelectedUserId(user.id)}
+                >
+                  Update Role
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
+      <ToastContainer />
     </div>
   );
-}
+};
+
+export default Page;
+

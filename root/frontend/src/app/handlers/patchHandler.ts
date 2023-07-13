@@ -1,13 +1,14 @@
-import axios from "axios";
+import axios from 'axios';
 
-const patchHandler = async (URL:string, formData:object, type:string='application/json') => {
-    const headers = {
-        'Content-Type': type,
-        Authorization: '',
-    };
-  const response:any = {
+const patchHandler = async (URL, formData, type = 'application/json', token) => {
+  const headers = {
+    'Content-Type': type,
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4ifQ.F1On1W7kllKokCMtmRvLQesN23KgurWLq_zBjP6UHX0`, 
+  };
+
+  const response = {
     status: 0,
-    data:{},
+    data: {},
   };
 
   await axios
