@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import postHandler from '../handlers/postHandler';
 
 const Form = () => {
-    const [anonymousFeedback, setAnonymousFeedback] = useState('');
+    const [anonymousFeedback, setAnonymousFeedback] = useState('no');
     const [graduationYear, setGraduationYear] = useState<number>(2024);
     const [issueSelection, setIssueSelection] = useState('');
     const [subject, setSubject] = useState('');
