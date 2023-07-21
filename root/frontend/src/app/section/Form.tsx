@@ -1,23 +1,29 @@
 'use client'
 import React, { useState } from 'react';
+import postHandler from '../handlers/postHandler';
 
 const Form = () => {
-    const [anonymousFeedback, setAnonymousFeedback] = useState('');
-    const [graduationYear, setGraduationYear] = useState('');
+    const [anonymousFeedback, setAnonymousFeedback] = useState('no');
+    const [graduationYear, setGraduationYear] = useState<number>(2024);
     const [issueSelection, setIssueSelection] = useState('');
     const [subject, setSubject] = useState('');
     const [description, setDescription] = useState('');
     const [name, setName] = useState('');
     const [registrationNumber, setRegistrationNumber] = useState('');
     const [email, setEmail] = useState('');
+    const [problemSubject, setProblemSubject] = useState('');
 
     const handleAnonymousFeedbackChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setAnonymousFeedback(e.target.value);
     };
 
-    const handleGraduationYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setGraduationYear(e.target.value);
+    const handleProblemSubject = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setProblemSubject(e.target.value);
     };
+
+    const handleGraduationYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setGraduationYear(parseInt(e.target.value));
+    };    
 
     const handleIssueSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setIssueSelection(e.target.value);
@@ -43,19 +49,24 @@ const Form = () => {
         setEmail(e.target.value);
     };
 
-    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log({
-            anonymousFeedback,
-            graduationYear,
-            issueSelection,
-            subject,
-            description,
-        });
-    };
-
+    
+        const formData = {
+          anymtype: anonymousFeedback === 'no' ? 1 : 0,
+          gradyr: graduationYear,
+          issuetype: problemSubject,
+          description: description,
+          name: name,
+          regno: registrationNumber,
+          email: email,
+        };
+        
+        const response = await postHandler('http://127.0.0.1:8080/posts/create', formData);
+        console.log(response);
+      };
     return (
-        <div className={`flex flex-col items-center align-center ${anonymousFeedback === 'no' ? 'mt-[5%] mb-[2%]' : 'mt-[10%] mb-[2%]'} justify-center mx-[10%]`}>
+        <div className={`flex flex-col items-center align-center ${anonymousFeedback === 'no' ? 'md:mt-[3%] mt-[5%] mb-[3%] md:mb-[1%]' : 'mt-[10%] mb-[3%]'} justify-center mx-[10%]`}>
             <div>
                 <p className={`text-4xl ${anonymousFeedback === 'no' ? 'mb-4' : 'mb-16'}`}>Send Us Your Feedback!</p>
             </div>
@@ -137,8 +148,8 @@ const Form = () => {
                     <p className='text-lg'>Problem Subject</p>
                     <select
                         className='text-lg w-full border-2 border-black bg-white rounded pl-2'
-                        value={graduationYear}
-                        onChange={handleGraduationYearChange}
+                        value={problemSubject}
+                        onChange={handleProblemSubject}
                     >
                         <option value='Select'>Select </option>
                         <option value='General Grievance'>General Grievance </option>
