@@ -36,7 +36,7 @@ const Page = () => {
         return;
       }
 
-      const response = await getHandler('http://127.0.0.1:8080/posts/get');
+      const response = await getHandler('http://127.0.0.1:8080/posts/get',token);
       if (response.status === 1) {
         setPosts(response.data);
       }

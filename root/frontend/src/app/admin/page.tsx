@@ -30,7 +30,7 @@ const Page = () => {
         return;
       }
 
-      const response = await getHandler('http://127.0.0.1:8080/admin/panel');
+      const response = await getHandler('http://127.0.0.1:8080/admin/panel',token);
       console.log(response);
       if (response.status === 1) {
         setUsers(response.data);
