@@ -19,7 +19,11 @@ const patchHandler = async (URL: string, formData: any, type = 'application/json
     })
     .catch((err) => {
       response.status = 0;
-      response.data = err.response.data;
+      if (err.response && err.response.data) {
+        response.data = err.response.data;
+      } else {
+        console.error("Error response or data is undefined:", err);
+      }
     });
   return response;
 };
